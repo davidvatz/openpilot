@@ -49,9 +49,9 @@ class CarInterface(CarInterfaceBase):
       ret.steerRatio = 13           # learned, 14 stock
       ret.steerActuatorDelay = 0.1
       ret.lateralTuning.pid.kf = 0.00003
-      ret.lateralTuning.pid.kiBP, ret.lateralTuning.pid.kpBP = [[0., 10., 20., 30.], [0., 10., 20., 30.]]
-      ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.01, 0.05, 0.2, 0.21], [0.0010, 0.004, 0.008, 0.009]]
-
+      ret.lateralTuning.pid.kiBP, ret.lateralTuning.pid.kpBP = [[0., 15.], [0., 15.]]
+      ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.05, 0.25], [0.1, 0.05]]
+    
     if candidate == CAR.FORESTER:
       ret.mass = 1568. + STD_CARGO_KG
       ret.wheelbase = 2.67
