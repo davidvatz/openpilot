@@ -43,15 +43,14 @@ class CarInterface(CarInterfaceBase):
       ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.0025, 0.1], [0.00025, 0.01]]
 
     if candidate == CAR.IMPREZA:
-      ret.steerRateCost = 1
       ret.mass = 1408. + STD_CARGO_KG
       ret.wheelbase = 2.67
       ret.centerToFront = ret.wheelbase * 0.5
       ret.steerRatio = 13           # learned, 14 stock
       ret.steerActuatorDelay = 0.1
       ret.lateralTuning.pid.kf = 0.000038
-      ret.lateralTuning.pid.kiBP, ret.lateralTuning.pid.kpBP = [[0., 15., 23.], [0., 15., 23.]]
-      ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.05, 0.25, 0.18], [0.1, 0.05, 0.0225]]
+      ret.lateralTuning.pid.kiBP, ret.lateralTuning.pid.kpBP = [[0., 14., 23.], [0., 14., 23.]]
+      ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.01, 0.65, 0.2], [0.001, 0.015, 0.025]]
     
     if candidate == CAR.FORESTER:
       ret.mass = 1568. + STD_CARGO_KG
