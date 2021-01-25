@@ -31,7 +31,7 @@ class CarInterface(CarInterfaceBase):
     # was never released
     ret.enableCamera = True
 
-    ret.steerRateCost = 0.7
+    ret.steerRateCost = 1
     ret.steerLimitTimer = 0.4
 
     if candidate == CAR.ASCENT:
@@ -48,12 +48,12 @@ class CarInterface(CarInterfaceBase):
       ret.mass = 1408. + STD_CARGO_KG
       ret.wheelbase = 2.67
       ret.centerToFront = ret.wheelbase * 0.5
-      ret.steerRatio = 15
-      ret.steerActuatorDelay = 0.4   # end-to-end angle controller
-      ret.lateralTuning.pid.kf = 0.00007843996051470903
+      ret.steerRatio = 13
+      ret.steerActuatorDelay = 0.2   # end-to-end angle controller
+      ret.lateralTuning.pid.kf = 0.000035
       ret.lateralTuning.pid.newKfTuned = True
-      ret.lateralTuning.pid.kiBP, ret.lateralTuning.pid.kpBP = [[0., 15.], [0., 15.]]
-      ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.05, 0.25], [0.1, 0.05]]
+      ret.lateralTuning.pid.kiBP, ret.lateralTuning.pid.kpBP = [[0., 14., 23.], [0., 14., 23.]]
+      ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.01, 0.035, 0.15], [0.001, 0.015, 0.025]]
 
     if candidate == CAR.FORESTER:
       ret.mass = 1568. + STD_CARGO_KG
