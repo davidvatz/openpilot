@@ -50,7 +50,7 @@ class CarInterface(CarInterfaceBase):
       ret.centerToFront = ret.wheelbase * 0.5
       ret.steerRatio = 13
       ret.steerActuatorDelay = 0.4  # end-to-end angle controller
-      ret.lateralTuning.pid.kf = 0.000035
+      ret.lateralTuning.pid.kf = 0.00007843996051470903
       ret.lateralTuning.pid.newKfTuned = True
       ret.lateralTuning.pid.kiBP, ret.lateralTuning.pid.kpBP = [[0., 14., 23.], [0., 14., 23.]]
       ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.00125, 0.004375, 0.01875], [0.00005, 0.0075, 0.00125]]
