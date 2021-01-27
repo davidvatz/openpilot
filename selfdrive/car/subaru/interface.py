@@ -49,11 +49,11 @@ class CarInterface(CarInterfaceBase):
       ret.wheelbase = 2.67
       ret.centerToFront = ret.wheelbase * 0.5
       ret.steerRatio = 13
-      ret.steerActuatorDelay = 0.4  # end-to-end angle controller
+      ret.steerActuatorDelay = 0.2  # end-to-end angle controller
       ret.lateralTuning.pid.kf = 0.000035
       ret.lateralTuning.pid.newKfTuned = True
       ret.lateralTuning.pid.kiBP, ret.lateralTuning.pid.kpBP = [[0., 14., 23.], [0., 14., 23.]]
-      ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.0025, 0.00875, 0.0375], [0.0001, 0.0015, 0.0025]]
+      ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.00125, 0.004375, 0.01875], [0.00005, 0.0075, 0.00125]]
 
     if candidate == CAR.FORESTER:
       ret.mass = 1568. + STD_CARGO_KG
