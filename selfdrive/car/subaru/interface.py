@@ -54,7 +54,7 @@ class CarInterface(CarInterfaceBase):
       ret.lateralTuning.pid.newKfTuned = True
       ret.lateralTuning.pid.kiBP, ret.lateralTuning.pid.kpBP = [[0., 14., 23.], [0., 14., 23.]]
       ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.000125, 0.0004375, 0.001875], [0.000005, 0.00075, 0.000125]]
-      ret.lateralTuning.pid.kdV = [0.2]
+      #ret.lateralTuning.pid.kdV = [0.2]
 
     if candidate == CAR.FORESTER:
       ret.mass = 1568. + STD_CARGO_KG
