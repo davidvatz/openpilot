@@ -47,9 +47,21 @@ class CarState(CarStateBase):
     ret.steeringTorque = cp.vl["Steering_Torque"]['Steer_Torque_Sensor']
     ret.steeringPressed = abs(ret.steeringTorque) > STEER_THRESHOLD[self.car_fingerprint]
 
+    #@letdudiss 18 Nov 2020 Avoids LKAS and ES fault when OP apply a steer value exceed what ES allows
+    #Add steer warning to car state update to allow apply_steer 0 when steer max torque warning occurs
+    ret.steerWarning = bool(cp.vl["Steering_Torque"]['Steer_Warning'])
+
     ret.cruiseState.enabled = cp.vl["CruiseControl"]['Cruise_Activated'] != 0
     ret.cruiseState.available = cp.vl["CruiseControl"]['Cruise_On'] != 0
     ret.cruiseState.speed = cp_cam.vl["ES_DashStatus"]['Cruise_Set_Speed'] * CV.KPH_TO_MS
+
+    #@LetsDuDiss 17 Dec 2020: Detect Engine Auto Stop Start State, this will allow carcontroller.py to only
+    #fake an AutoSS button once, the fake button press will repeat until the below state for AutoSS is 3
+    #Assumption: State == 3 => Turned OFF (Orange/Yellow icon)
+    #            State == 2 => Not possible (white icon with strike diagonally)
+    #            State == 1 => Engine Stopped ???
+    #            State == 0 => Ready
+    self.autoStopStartDisabled = cp.vl["Engine_Auto_SS"]['AUTO_SS_STATE'] == 3
 
     # UDM Forester, Legacy: mph = 0
     if self.car_fingerprint in [CAR.FORESTER_PREGLOBAL, CAR.LEGACY_PREGLOBAL] and cp.vl["Dash_State"]['Units'] == 0:
@@ -70,10 +82,19 @@ class CarState(CarStateBase):
       self.ready = not cp_cam.vl["ES_DashStatus"]["Not_Ready_Startup"]
       self.es_accel_msg = copy.copy(cp_cam.vl["ES_CruiseThrottle"])
     else:
+
       ret.steerWarning = cp.vl["Steering_Torque"]['Steer_Warning'] == 1
       ret.cruiseState.nonAdaptive = cp_cam.vl["ES_DashStatus"]['Conventional_Cruise'] == 1
       self.es_distance_msg = copy.copy(cp_cam.vl["ES_Distance"])
       self.es_lkas_msg = copy.copy(cp_cam.vl["ES_LKAS_State"])
+      #@LetsDuDiss 17 Dec 2020: Make a copy of Dashlights message so we can modify it in carcontroller.py and subarucan.py
+      self.dashlights_msg = copy.copy(cp.vl["Dashlights"])
+      #@LetsDuDiss 19 Dec 2020: Make a copy of Throttle message to allow us to send a throttle tap to ES to get out of HOLD state
+      self.throttle_msg = copy.copy(cp.vl["Throttle"])
+      #Subaru STOP AND GO: ES States required to determine when to send throttle tap to get out of HOLD state
+      self.close_distance = cp_cam.vl["ES_Distance"]['Close_Distance']
+      self.car_follow = cp_cam.vl["ES_Distance"]['Car_Follow']
+      self.cruise_state = cp_cam.vl["ES_DashStatus"]['Cruise_State']
 
     return ret
 
@@ -84,13 +105,44 @@ class CarState(CarStateBase):
       # sig_name, sig_address, default
       ("Steer_Torque_Sensor", "Steering_Torque", 0),
       ("Steering_Angle", "Steering_Torque", 0),
+      ("Steer_Warning", "Steering_Torque", 0),
       ("Cruise_On", "CruiseControl", 0),
       ("Cruise_Activated", "CruiseControl", 0),
       ("Brake_Pedal", "Brake_Pedal", 0),
+
+      #SUBARU STOP AND GO
+      #@LetsDuDiss 19 Dec 2020: Added signal Labels and default values for Throttle message, this will allow us
+      #to keep ES happy when we block Throttle message from ECU and send our own Throttle message to ES
+      #Checksum and Counter are required te be parsed here with default value to keep ES happy
+      ("Checksum", "Throttle", 0),
+      ("Counter", "Throttle", 0),
+      ("SPARE_SIGNAL_1", "Throttle", 0),
+      ("Engine_RPM", "Throttle", 0),
+      ("SPARE_SIGNAL_2", "Throttle", 0),
       ("Throttle_Pedal", "Throttle", 0),
+      ("Throttle_Cruise", "Throttle", 0),
+      ("Throttle_Combo", "Throttle", 0),
+      ("Signal1", "Throttle", 0),
+      ("Off_Accel", "Throttle", 0),
+
       ("LEFT_BLINKER", "Dashlights", 0),
       ("RIGHT_BLINKER", "Dashlights", 0),
       ("SEATBELT_FL", "Dashlights", 0),
+      #@LetsDuDiss 17 Dec 2020: Added signal labels and default values to Dashlights messages (IMPORATANT: including Counter)
+      #so that Dashlight messages composed by OP is sent without any possibility of errors. It is important to initialise Counter
+      #as without it carcontroller.py will crash when it tries to read Counter attribute of Dashlights message.
+      ("AUTO_SS_BTN", "Dashlights", 0),
+      ("ICY_ROAD", "Dashlights", 0),
+      ("Counter", "Dashlights", 0),
+      ("SPARE_SIGNAL_2", "Dashlights", 0),
+      ("SPARE_SIGNAL_3", "Dashlights", 0),
+      ("SPARE_SIGNAL_4", "Dashlights", 0),
+      ("SPARE_SIGNAL_5", "Dashlights", 0),
+      ("SPARE_SIGNAL_6", "Dashlights", 0),
+      ("SPARE_SIGNAL_7", "Dashlights", 0),
+      ("SPARE_SIGNAL_1", "Dashlights", 0),
+      ("SPARE_SIGNAL_8", "Dashlights", 0),
+      ("SPARE_SIGNAL_9", "Dashlights", 0),
       ("FL", "Wheel_Speeds", 0),
       ("FR", "Wheel_Speeds", 0),
       ("RL", "Wheel_Speeds", 0),
@@ -106,6 +158,9 @@ class CarState(CarStateBase):
       ("L_APPROACHING", "BSD_RCTA", 0),
       ("R_APPROACHING", "BSD_RCTA", 0),
       ("Steer_Error_1", "Steering_Torque", 0),
+      #@LetsDuDiss 17 Dec 2020: Added new message that contains the State of AutoSS, enables controller.py to
+      #only fake AutoSS toggle button press once.
+      ("AUTO_SS_STATE", "Engine_Auto_SS", 0),
     ]
 
     checks = [
@@ -215,6 +270,9 @@ class CarState(CarStateBase):
         ("LKAS_Right_Line_Green", "ES_LKAS_State", 0),
         ("LKAS_Alert", "ES_LKAS_State", 0),
         ("Signal3", "ES_LKAS_State", 0),
+        #SUBARU STOP AND GO
+        #@LetsDuDiss 19 dec 2020: Get CruiseState, to determine if we are in ACC HOLD state
+        ("Cruise_State", "ES_DashStatus", 0),
       ]
 
       checks = [

@@ -6,7 +6,7 @@ Ecu = car.CarParams.Ecu
 
 class CAR:
   ASCENT = "SUBARU ASCENT LIMITED 2019"
-  IMPREZA = "SUBARU IMPREZA LIMITED 2019"
+  IMPREZA = "SUBARU IMPREZA 2021"
   FORESTER = "SUBARU FORESTER 2019"
   FORESTER_HYBRID = "SUBARU FORESTER HYBRID 2020"
   FORESTER_PREGLOBAL = "SUBARU FORESTER 2017 - 2018"
@@ -19,7 +19,8 @@ FINGERPRINTS = {
   # SUBARU ASCENT LIMITED 2019
     2: 8, 64: 8, 65: 8, 72: 8, 73: 8, 280: 8, 281: 8, 290: 8, 312: 8, 313: 8, 314: 8, 315: 8, 316: 8, 326: 8, 544: 8, 545: 8, 546: 8, 552: 8, 554: 8, 557: 8, 576: 8, 577: 8, 722: 8, 801: 8, 802: 8, 805: 8, 808: 8, 811: 8, 816: 8, 826: 8, 837: 8, 838: 8, 839: 8, 842: 8, 912: 8, 915: 8, 940: 8, 1614: 8, 1617: 8, 1632: 8, 1650: 8, 1657: 8, 1658: 8, 1677: 8, 1722: 8, 1743: 8, 1759: 8, 1785: 5, 1786: 5, 1787: 5, 1788: 8
   }],
-  CAR.IMPREZA: [{
+  #@LetsDuDiss 18 Dec 2020: swapped Forester with Impreza in fingerprints, just to get FPv1 to identify my car as IMPREZA
+  CAR.FORESTER: [{
   # SUBARU IMPREZA LIMITED 2019
     2: 8, 64: 8, 65: 8, 72: 8, 73: 8, 280: 8, 281: 8, 290: 8, 312: 8, 313: 8, 314: 8, 315: 8, 316: 8, 326: 8, 544: 8, 545: 8, 546: 8, 552: 8, 554: 8, 557: 8, 576: 8, 577: 8, 722: 8, 801: 8, 802: 8, 805: 8, 808: 8, 816: 8, 826: 8, 837: 8, 838: 8, 839: 8, 842: 8, 912: 8, 915: 8, 940: 8, 1614: 8, 1617: 8, 1632: 8, 1650: 8, 1657: 8, 1658: 8, 1677: 8, 1697: 8, 1722: 8, 1743: 8, 1759: 8, 1786: 5, 1787: 5, 1788: 8, 1809: 8, 1813: 8, 1817: 8, 1821: 8, 1840: 8, 1848: 8, 1924: 8, 1932: 8, 1952: 8, 1960: 8
   },
@@ -27,7 +28,7 @@ FINGERPRINTS = {
   {
     2: 8, 64: 8, 65: 8, 72: 8, 73: 8, 280: 8, 281: 8, 290: 8, 312: 8, 313: 8, 314: 8, 315: 8, 316: 8, 326: 8, 372: 8, 544: 8, 545: 8, 546: 8, 554: 8, 557: 8, 576: 8, 577: 8, 722: 8, 801: 8, 802: 8, 805: 8, 808: 8, 811: 8, 826: 8, 837: 8, 838: 8, 839: 8, 842: 8, 912: 8, 915: 8, 940: 8, 1614: 8, 1617: 8, 1632: 8, 1650: 8, 1657: 8, 1658: 8, 1677: 8, 1697: 8, 1759: 8, 1786: 5, 1787: 5, 1788: 8
   }],
-  CAR.FORESTER: [{
+  CAR.IMPREZA: [{
   # Forester Sport 2019
     2: 8, 64: 8, 65: 8, 72: 8, 73: 8, 280: 8, 281: 8, 282: 8, 312: 8, 313: 8, 314: 8, 315: 8, 316: 8, 326: 8, 372: 8, 552: 8, 557: 8, 576: 8, 577: 8, 722: 8, 808: 8, 811: 8, 816: 8, 826: 8, 837: 8, 838: 8, 839: 8, 842: 8, 912: 8, 915: 8, 940: 8, 1614: 8, 1617: 8, 1632: 8, 1650: 8, 1651: 8, 1657: 8, 1658: 8, 1677: 8, 1697: 8, 1698: 8, 1722: 8, 1743: 8, 1759: 8, 1787: 5, 1788: 8, 1809: 8, 1813: 8, 1817: 8, 1821: 8, 1840: 8, 1848: 8, 1924: 8, 1932: 8, 1952: 8, 1960: 8
   },
@@ -69,8 +70,10 @@ FINGERPRINTS = {
   }],
 }
 
+#FIXME: IMPREZA to use FPv2
+#@LetsDuDiss 18 Dec 2020: Removed IMPREZA from IGNORED FPv1 list, just to get FPv1 to identify my car as IMPREZA
 # Use only FPv2
-IGNORED_FINGERPRINTS = [CAR.IMPREZA, CAR.ASCENT, CAR.FORESTER_HYBRID]
+IGNORED_FINGERPRINTS = [CAR.ASCENT, CAR.FORESTER_HYBRID]
 
 FW_VERSIONS = {
   CAR.ASCENT: {
@@ -122,6 +125,7 @@ FW_VERSIONS = {
     # 2018 Crosstrek - UDM / @rwalsh3 (new engine fw)
     # 2019 Crosstrek - UDM / @Nooks Cranny
     # Ecu, addr, subaddr: ROM ID
+    # 2021 Impreza - AUDM / @letsdudiss
     (Ecu.esp, 0x7b0, None): [
       b'\x7a\x94\x3f\x90\x00',
       b'\xa2 \x185\x00',
@@ -129,6 +133,7 @@ FW_VERSIONS = {
       b'z\x94.\x90\x00',
       b'z\x94\b\x90\x01',
       b'\xa2 \x19`\x00',
+      b'\xa2 !5\x00',
     ],
     (Ecu.eps, 0x746, None): [
       b'\x7a\xc0\x0c\x00',
@@ -137,6 +142,7 @@ FW_VERSIONS = {
       b'z\xc0\x04\x00',
       b'z\xc0\x00\x00',
       b'\x8a\xc0\x10\x00',
+      b'\x9a\xc0\b\x00',
     ],
     (Ecu.fwdCamera, 0x787, None): [
       b'\x00\x00d\xb5\x1f@ \x0e',
@@ -144,6 +150,7 @@ FW_VERSIONS = {
       b'\x00\x00e\x1c\x1f@ \x14',
       b'\x00\x00d)\x1f@ \a',
       b'\x00\x00e+\x1f@ \x14',
+      b'\xf1\x00\x00\x00\x02',
     ],
     (Ecu.engine, 0x7e0, None): [
       b'\xaa\x61\x66\x73\x07',
@@ -154,6 +161,7 @@ FW_VERSIONS = {
       b'\xaa!dq\a',
       b'\xaa!dt\a',
       b'\xc5!dr\a',
+      b'\xcaac0\a',
     ],
     (Ecu.transmission, 0x7e1, None): [
       b'\xe3\xe5\x46\x31\x00',
@@ -163,6 +171,7 @@ FW_VERSIONS = {
       b'\xe3\xf5\a\x00\x00',
       b'\xe3\xf5C\x00\x00',
       b'\xe5\xf5B\x00\x00',
+      b'\xe6\x15\x042\x00',
     ],
   },
   CAR.FORESTER_PREGLOBAL: {
