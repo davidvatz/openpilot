@@ -97,11 +97,11 @@ class opParams:
                         'steer_rate_fix': Param(True, bool, 'To restrict torque when steering rate goes above 100 deg/s\n'
                                                             'Disable when tuning to reduce steering faults natively (without this hacky fix)', live=True),
                         'steer_rate_fix_rate': Param(100, int, 'The steer rate at which it cuts torque', live=True),
-                        'lat_p_gain': Param(.15, VT.number, 'actual proportional gain', live=True),
-                        'lat_i_gain': Param(.05, VT.number, 'actual integral gain', live=True),
-                        'lat_d_gain': Param(1, VT.number, 'actual derivative gain', live=True),
-                        'lat_f_multiplier': Param(1, VT.number, 'feedforward multiplier (multiplied by the value in interface)', live=True),
-                        'steer_actuator_delay': Param(0.12, VT.number, 'The steer actuator delay', live=True),
+                        'lat_p_gain': Param(.15, VT.number, 'actual proportional gain', live=False),
+                        'lat_i_gain': Param(.05, VT.number, 'actual integral gain', live=False),
+                        'lat_d_gain': Param(1, VT.number, 'actual derivative gain', live=False),
+                        'lat_f_multiplier': Param(1, VT.number, 'feedforward multiplier (multiplied by the value in interface)', live=False),
+                        'steer_actuator_delay': Param(0.12, VT.number, 'The steer actuator delay', live=False),
 
                         'STEER_MAX': Param(1500, int, 'Default: 1500', live=True),
                         'STEER_DELTA_UP': Param(10, VT.number, 'Default: 10', live=True),
