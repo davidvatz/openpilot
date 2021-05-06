@@ -112,6 +112,7 @@ FW_VERSIONS = {
     # 2019 Impreza - UDM / @cheesypotato
     # 2019 Impreza - UDM / @dbzx6r
     # 2018 Impreza Sport - UDM / @gking
+    # 2020 Impreza Premium - UDM / @davidvatz
     # Ecu, addr, subaddr: ROM ID
     (Ecu.esp, 0x7b0, None): [
       b'\x7a\x94\x3f\x90\x00',
@@ -121,6 +122,8 @@ FW_VERSIONS = {
       b'z\x94\b\x90\x01',
       b'\xa2 \x19`\x00',
       b'z\x94\f\x90\001',
+      b'\xa2 \0313\000', #2020 Impreza
+      
     ],
     (Ecu.eps, 0x746, None): [
       b'\x7a\xc0\x0c\x00',
@@ -129,6 +132,7 @@ FW_VERSIONS = {
       b'z\xc0\x04\x00',
       b'z\xc0\x00\x00',
       b'\x8a\xc0\x10\x00',
+      b'\x9a\xc0\000\000', #2020 Impreza
     ],
     (Ecu.fwdCamera, 0x787, None): [
       b'\x00\x00d\xb5\x1f@ \x0e',
@@ -138,6 +142,7 @@ FW_VERSIONS = {
       b'\x00\x00e+\x1f@ \x14',
       b'\000\000e+\000\000\000\000',
       b'\000\000dd\037@ \016',
+      b'\000\000eb\037@ \"', #2020 Impreza
     ],
     (Ecu.engine, 0x7e0, None): [
       b'\xaa\x61\x66\x73\x07',
@@ -150,6 +155,7 @@ FW_VERSIONS = {
       b'\xc5!dr\a',
       b'\xc5!ar\a',
       b'\xbe!as\a',
+      b'\xca!`p\a', #2020 Impreza
     ],
     (Ecu.transmission, 0x7e1, None): [
       b'\xe3\xe5\x46\x31\x00',
@@ -161,6 +167,7 @@ FW_VERSIONS = {
       b'\xe5\xf5B\x00\x00',
       b'\xe5\xf5$\000\000',
       b'\xe4\xf5\a\000\000',
+      b'\xe6\xf5\004\000\000', #2020 Impreza
     ],
   },
   CAR.FORESTER_PREGLOBAL: {
